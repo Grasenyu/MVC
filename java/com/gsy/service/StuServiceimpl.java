@@ -1,0 +1,19 @@
+package com.gsy.service;
+
+import java.util.List;
+
+import com.gsy.annotation.Service;
+
+
+
+@Service("stuservice") //iocMap.put("stuservice",new StuServiceimpl )
+public class StuServiceimpl implements StuService {
+
+
+	@Override
+	public String getStr(String name) {
+
+		return name;
+	}
+	
+}
