@@ -71,8 +71,12 @@ public class DispatcherServlet extends HttpServlet {
 						RequestMapping mrqm = method.getAnnotation(RequestMapping.class);
 						String methodPath = mrqm.value();
 						handlerMap.put(classPath+methodPath, method);
+					}else {
+						continue;
 					}
 				}
+			}else {
+				continue;
 			}
 		}
 	}
@@ -87,11 +91,13 @@ public class DispatcherServlet extends HttpServlet {
 				for (Field field : fields) {
 					//判断成员变量上面是否有@AutoWired注解
 					if (field.isAnnotationPresent(Autowired.class)) {
+						System.out.println(field);
 						Autowired autowired = field.getAnnotation(Autowired.class);
 						String key = autowired.value();
+						Object bean = beans.get(key);
 						field.setAccessible(true);
 						try {
-							field.set(instance,beans.get(key));
+							field.set(instance,bean);
 						} catch (IllegalArgumentException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -100,6 +106,8 @@ public class DispatcherServlet extends HttpServlet {
 							e.printStackTrace();
 						}
 						
+					}else {
+						continue;
 					}
 				}
 			}
@@ -166,7 +174,6 @@ public class DispatcherServlet extends HttpServlet {
 				classNames.add(scanPackage+"."+filePath.getName());		//这里可以拿到com.gsy....class
 			}
 		}
-		
 	}
 
 	/**
@@ -182,9 +189,8 @@ public class DispatcherServlet extends HttpServlet {
 		StuController controller = (StuController) beans.get("/"+path.split("/")[1]);
 		Object[] args = hand(req, resp, method);
 		try {
-			Object invoke = method.invoke(controller, args);
-			System.out.println("------"+invoke);
-			resp.getWriter().println(invoke); 	
+			method.invoke(controller, args);
+		
 		} catch (IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

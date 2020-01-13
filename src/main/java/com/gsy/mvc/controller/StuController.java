@@ -1,18 +1,15 @@
 package com.gsy.mvc.controller;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.io.PrintWriter;
 
-import javax.swing.Spring;
-
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import com.gsy.mvc.annotation.Autowired;
 import com.gsy.mvc.annotation.Controller;
 import com.gsy.mvc.annotation.RequestMapping;
+import com.gsy.mvc.annotation.RequestParam;
 import com.gsy.mvc.service.StuService;
-
-
-
 
 
 @Controller
@@ -20,15 +17,15 @@ import com.gsy.mvc.service.StuService;
 public class StuController {
 	
 	@Autowired
-	StuService stuservice;	
+	private StuService stuservice;	
 	
 	@RequestMapping("/getstuall")
-	public Object getAll(String name) {
+	public void getAll(HttpServletRequest req, HttpServletResponse resp, @RequestParam("age") String name) throws IOException {
 			
-		//将查询到的结果返回给前段页面
-		return"fdsfdsa";
+		PrintWriter writer = resp.getWriter();
+		writer.write(stuservice.getStr(name));
 		
-	}
+	}   
 	
 
 	
